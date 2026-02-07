@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get in Touch | Priority Support</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+    
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            </div>
+            <h1>Let's Scale Your Business</h1>
+            <p class="subtitle">Fill out the form below. Our team typically responds within <strong>5 minutes</strong>.</p>
+        </div>
+
+        <form id="leadForm" class="lead-form">
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" placeholder="John Doe" required autocomplete="name">
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Work Email</label>
+                <input type="email" id="email" name="email" placeholder="john@company.com" required autocomplete="email">
+            </div>
+            
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" placeholder="+1 (555) 000-0000" required autocomplete="tel">
+            </div>
+            
+            <div class="form-group">
+                <label for="company">Company Name (Optional)</label>
+                <input type="text" id="company" name="company" placeholder="Acme Inc.">
+            </div>
+
+            <button type="submit" class="submit-btn">
+                Request Callback
+            </button>
+        </form>
+
+        <div id="successMessage" class="message success">
+            ✅ <strong>Success!</strong> Your request has been received. Check your email shortly.
+        </div>
+        <div id="errorMessage" class="message error"></div>
+        
+        <div class="footer">
+            <p class="footer-text">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                Secure 256-bit SSL Encrypted
+            </p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('leadForm').onsubmit = async (e) => {
+            e.preventDefault();
+            
+            // UI Elements
+            const btn = e.target.querySelector('.submit-btn');
+            const originalBtnText = btn.innerText;
+            const successMsg = document.getElementById('successMessage');
+            const errorMsg = document.getElementById('errorMessage');
+            
+            // Set Loading State
+            btn.classList.add('loading');
+            btn.innerText = 'Processing...';
+            successMsg.classList.remove('show');
+            errorMsg.classList.remove('show');
+            
+            // Collect Data
+            const data = {
+                name: e.target.name.value,
+                email: e.target.email.value,
+                phone: e.target.phone.value,
+                company: e.target.company.value
+            };
+            
+            // ⚠️ IMPORTANT: Replace with your n8n Production Webhook URL
+            const webhookURL = 'http://localhost:5678/webhook-test/lead-capture'; 
+            
+            try {
+                // Send data to n8n
+                const response = await fetch(webhookURL, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(data)
+                });
+                
+                if(response.ok) {
+                   // Success Handler
+                   successMsg.classList.add('show');
+                   e.target.reset(); // Clear the form
+                } else {
+                   throw new Error('Server connection failed');
+                }
+
+            } catch (error) {
+                // Error Handler
+                errorMsg.innerHTML = '❌ <strong>Error:</strong> Unable to submit form. Please try again.';
+                errorMsg.classList.add('show');
+                console.error(error);
+            } finally {
+                // Reset Button State
+                btn.classList.remove('loading');
+                btn.innerText = originalBtnText;
+            }
+        };
+    </script>
+</body>
+</html>

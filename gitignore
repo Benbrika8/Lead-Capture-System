@@ -1,0 +1,64 @@
+# Environment variables .env
+.env.local
+.env.production
+*.env
+
+# API Keys & Credentials
+credentials.json
+config.json
+secrets.yaml
+
+# OS Generated Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# IDE & Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.settings/
+
+# Logs & Debugging
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+debug.log
+
+# Backup files
+*.bak
+*.tmp
+*.backup
+backup_leads.txt
+
+# Personal notes notes.txt
+TODO.md
+NOTES.md
+draft/
+
+# Testing
+test-data/
+*.test.js
+
+# Build outputs (لو  build process )
+dist/
+build/
+*.min.js
+*.min.css
+
+# Dependencies ( npm أو package managers)
+node_modules/
+vendor/
+
+# Cache
+.cache/
+*.cache
